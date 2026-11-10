@@ -3,23 +3,30 @@
     "keyboard_name": "hackpad",
     "maintainer": "yApple11",
     "bootloader": "rp2040",
-    "diode_direction": "COL2ROW",
     "features": {
         "encoder":true,
         "bootmagic": true,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true
+        "nkro": true,
+        "rgblight": true
+
+    },
+    "ws2812": {
+        "pin": "GP3",
+        "driver": "vendor"
+    },
+    "rgblight": {
+        "led_count": 6,
     },
     "matrix_pins": {
-        "direct": [
-            ["GP10"] //the rotary encoder button
-            ["GP1", "GP3", "GP6"],
-            ["GP2", "GP5", "GP7"]
+        "direct": [ //GP means it's the pinouts not the pad numbers
+            ["GP4", null, null], //the rotary encoder button
+            ["GP27", "GP29", "GP0"],
+            ["GP28", "GP7", "GP1"]
         ]
     },
     "processor": "RP2040",
-    "url": "https://github.com/yApple11/Hackpad",
     "usb": {
         "device_version": "1.0.0",
         "pid": "0x0000",
@@ -29,17 +36,19 @@
         "LAYOUT_ortho_2x3": {
             "layout": [
                 {"matrix": [0, 0], "x": 0, "y": 0},
-                {"matrix": [0, 1], "x": 1, "y": 0},
-                {"matrix": [0, 2], "x": 2, "y": 0},
                 {"matrix": [1, 0], "x": 0, "y": 1},
                 {"matrix": [1, 1], "x": 1, "y": 1},
-                {"matrix": [1, 2], "x": 2, "y": 1}
+                {"matrix": [1, 2], "x": 2, "y": 1},
+                {"matrix": [2, 0], "x": 2, "y": 1},
+                {"matrix": [2, 1], "x": 2, "y": 1},
+                {"matrix": [2, 2], "x": 2, "y": 1}
             ]
         }
-    }
+    },
     "encoder":{
         "rotary": [
             {"pin_a": "GP9", "pin_b": "GP8", "resolution": 4}
         ]
     }
 }
+```
