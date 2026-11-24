@@ -14,10 +14,11 @@ enum layers {
     LAYER_COUNT //variable for what layer it is on
 };
 
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_ENCODERS] = { //just keycodes for rotary encoder
-    [_BASE] = { KC_VOLU, KC_VOLD },
-    [_MATH] = { KC_VOLU, KC_VOLD },
-    [_ONSHAPE] = { KC_VOLU, KC_VOLD }
+// rotary encoder: turning changes volume on every layer (the encoder's button is NEXT_LYR in the keymap below)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [_BASE]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_MATH]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_ONSHAPE] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) }
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) { //function for layer key
@@ -47,8 +48,13 @@ void keyboard_post_init_user(void) {
     layer_state_set_user(layer_state);          // draw the starting layer's LEDs
 }
 
+void suspend_wakeup_init_user(void) {
+    layer_state_set_user(layer_state);          // redraw the layer LEDs after the computer wakes up
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
+     *         (ENC)   <- encoder button
      * ┌───┬───┬───┐
      * │ A │ B │ C │
      * ├───┼───┼───┤
@@ -64,23 +70,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     //Each number in the brackets indicates what number layer it is
 
-    [_BASE] = LAYOUT_ortho_2x3( //default layout
+    [_BASE] = LAYOUT( //default layout
 
         //G is cmd, but C is ctrl, so use G
 
-        NEXT_LYR, //next layer (obviously)
+        NEXT_LYR, //encoder button: next layer
         //skeeo   cmd+w    new bowser search
         KC_SLEP, G(KC_W), KC_WWW_SEARCH,
         //%       launchpad      Raycast
         S(KC_5), KC_LAUNCHPAD, A(KC_SPACE)
     ),
-    [_MATH] = LAYOUT_ortho_2x3( //math layout
-        _______,
+    [_MATH] = LAYOUT( //math layout
+        NEXT_LYR, //encoder button: next layer
         KC_KP_PLUS,    KC_KP_ASTERISK,    KC_KP_SLASH,
         S(KC_COMMA),    S(KC_DOT),    S(KC_6)
     ),
-    [_ONSHAPE] = LAYOUT_ortho_2x3(//onshape layout
-        _______,
+    [_ONSHAPE] = LAYOUT(//onshape layout
+        NEXT_LYR, //encoder button: next layer
         S(KC_S),    KC_L,    KC_D,
         KC_E,    S(KC_M),    S(KC_W)
     )
